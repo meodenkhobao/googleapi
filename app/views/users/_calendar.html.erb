@@ -1,0 +1,18 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Start</th>
+      <th>End</th>
+      <th>Event</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |event| %>
+    <tr>
+      <td><%= event[:start_time].strftime("%Y-%m-%d %H:%M:%S") %></td>
+      <td><%= event[:end_time].strftime("%Y-%m-%d %H:%M:%S") %></td>
+      <td><%= link_to event[:summary], event[:link] %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

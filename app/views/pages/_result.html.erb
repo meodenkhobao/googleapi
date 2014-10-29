@@ -1,0 +1,15 @@
+<div id="loading">
+  <div id="loader"></div>
+</div>
+<div class="result"></div>
+<script>
+  $(document).ready(function() {
+    $.ajax({
+      type: 'GET',
+      url: "<%= url %>",
+      complete: function(data) {
+        $("#loading").hide()
+      }
+    });
+  });
+</script>

@@ -1,0 +1,38 @@
+<br/>
+<h2>Account Information</h2>
+<br/>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col-md-4">
+      <%= image_tag current_user.photo.split('?').first + "?sz=300" %>
+    </div>
+    <div class="col-md-8">
+      <table class="table table-hover">
+        <tr>
+          <th>Google+ ID</th>
+          <td><%= current_user.google_id %></td>
+        </tr>
+        <tr>
+          <th>Display Name</th>
+          <td><%= current_user.name %></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td><%= current_user.mail %></td>
+        </tr>
+        <tr>
+          <th>Profile</th>
+          <td><%= link_to current_user.google_profile_url, current_user.google_profile_url %></td>
+        </tr>
+        <tr>
+          <th>Friends</th>
+          <td><div id="friends-count">0</div></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<h2>Friends</h2>
+<br/>
+<%= render partial: 'result', locals: {url: googleplus_user_path(current_user, format: :js)} %>
