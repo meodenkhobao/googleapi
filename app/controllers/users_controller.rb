@@ -42,8 +42,10 @@ class UsersController < ApplicationController
         calendarId: cal.id}).data.items
       @events += events.map do |event|
         {
-          start_time: event.start.try(:dateTime) || event.start.try(:date).try(:to_time) || event.created,
-          end_time: event.end.try(:dateTime) || event.end.try(:date).try(:to_time) || event.created,
+          start_time: (event.start.try(:[], 'dateTime') ||
+            event.start.try(:[], 'date').try(:to_time) || event.created).localtime,
+          end_time: (event.end.try(:[], 'dateTime') ||
+            event.end.try(:[], 'date').try(:to_time) || event.created).localtime,
           summary: event.summary,
           link: event.htmlLink
         }
