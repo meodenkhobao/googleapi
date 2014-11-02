@@ -1,0 +1,21 @@
+<div id=<%= "month-#{@date.year}-#{@date.month}" %> class="month-view">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <div class="month-nav">
+        <%= link_to_today %>
+        <%= link_to_prev_month %>
+        <div class="btn btn-disabled month-title">
+          <%= "#{@date.strftime("%B")} #{@date.year}" %>
+        </div>
+        <%= link_to_next_month %>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <%= calendar @date.to_date, @dates do |d, m| %>
+        <%= date_cell(d, m) %>
+      <% end %>
+    </div>
+  </div>
+</div>

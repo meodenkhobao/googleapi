@@ -1,18 +1,62 @@
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th>Start</th>
-      <th>End</th>
-      <th>Event</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @events.each do |event| %>
-    <tr>
-      <td><%= event[:start_time].strftime("%Y-%m-%d %H:%M:%S") %></td>
-      <td><%= event[:end_time].strftime("%Y-%m-%d %H:%M:%S") %></td>
-      <td><%= link_to event[:summary], event[:link] %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+<% @date = @first_date = [@events.last[:start_time].beginning_of_month, Time.current.beginning_of_month].min.utc %>
+<% @last_date = [@events.first[:start_time].end_of_month, Time.current.end_of_month].max.utc %>
+<% @dates = @events.map { |e| e[:start_time].to_date }.uniq %>
+<% while @date <= @last_date do %>
+  <%= render partial: 'month' %>
+  <% @date += 1.month %>
+<% end %>
+
+<%= hidden_field_tag 'current-year', Date.current.year %>
+<%= hidden_field_tag 'current-month', Date.current.month %>
+
+<script>
+  $('.calendar .calendar-cell .with-event').popover({
+    placement: "top",
+    trigger: "hover",
+    html: true
+  });
+  $('.month-view').hide();
+
+  function showCurrentMonth() {
+    var currentMonth = '#month-' + $('#current-year').val() + '-' + $('#current-month').val();
+    $(currentMonth).show();
+  }
+
+  function hideCurrentMonth() {
+    var currentMonth = '#month-' + $('#current-year').val() + '-' + $('#current-month').val();
+    $(currentMonth).hide();
+  }
+
+  showCurrentMonth();
+
+  $('.today').click(function() {
+    hideCurrentMonth();
+    $('#current-year').val('<%= Date.current.year %>');
+    $('#current-month').val('<%= Date.current.month %>');
+    showCurrentMonth();
+  });
+
+  $('.next-month').click(function() {
+    hideCurrentMonth();
+    var nextMonth = parseInt($('#current-month').val()) + 1;
+    if (nextMonth > 12) {
+      nextMonth = 1;
+      nextYear = parseInt($('#current-year').val()) + 1;
+      $('#current-year').val(nextYear);
+    }
+    $('#current-month').val(nextMonth);
+    showCurrentMonth();
+  });
+
+  $('.prev-month').click(function() {
+    hideCurrentMonth();
+    var prevMonth = parseInt($('#current-month').val()) - 1;
+    if (prevMonth < 1) {
+      prevMonth = 12;
+      prevYear = parseInt($('#current-year').val()) - 1;
+      $('#current-year').val(prevYear);
+    }
+    $('#current-month').val(prevMonth);
+    showCurrentMonth();
+  });
+</script>
